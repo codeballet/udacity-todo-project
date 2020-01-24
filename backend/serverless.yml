@@ -3,13 +3,15 @@ service:
 
 plugins:
   - serverless-webpack
+  - serverless-aws-documentation
+  - serverless-reqvalidator-plugin
   - serverless-iam-roles-per-function
 
 provider:
   tracing:
     lambda: true
     apiGateway: true
-    
+
   name: aws
   runtime: nodejs8.10
 
