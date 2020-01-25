@@ -11,14 +11,21 @@ export async function getAllTodos(): Promise<TodoItem[]> {
 }
 
 export async function createTodo(
-  createTodoReques: CreateTodoRequest
+  createTodoRequest: CreateTodoRequest,
+  jwtToken: string
 ): Promise<TodoItem> {
 
   const todoId = uuid.v4()
-  const userId = 'notImplemented'
+  const userId = jwtToken
 
   return await todosAccess.createTodo({
-    
+    userId: userId,
+    todoId: todoId,
+    createdAt: new Date().toISOString(),
+    name: createTodoRequest.name,
+    dueDate: createTodoRequest.dueDate,
+    done: false,
+    attachmentUrl: undefined
   })
 
 }
