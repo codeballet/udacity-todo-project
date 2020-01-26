@@ -3,6 +3,7 @@ import * as uuid from 'uuid'
 import { TodoItem } from '../models/TodoItem'
 import { TodosAccess } from '../dataLayer/todosAccess'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import {UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { parseUserId } from '../auth/utils'
 
 const todosAccess = new TodosAccess()
@@ -30,6 +31,10 @@ export async function createTodo(
   })
 }
 
-export async function deleteTodo(todoId: string): Promise<TodoItem> {
+export async function deleteTodo(todoId: string): Promise<any> {
   return await todosAccess.deleteTodo(todoId)
+}
+
+export async function updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<TodoItem> {
+  return await todosAccess.updateTodo(todoId, updatedTodo)
 }

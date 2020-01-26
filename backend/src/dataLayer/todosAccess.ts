@@ -3,6 +3,7 @@ import * as AWSXRay from 'aws-xray-sdk'
 
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { TodoItem } from '../models/TodoItem'
+import {UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { createLogger } from '../utils/logger'
 
 const logger = createLogger('todosAccess')
@@ -36,10 +37,10 @@ export class TodosAccess {
     return todo
   }
 
-  async deleteTodo(todoId): Promise<TodoItem> {
+  async deleteTodo(todoId): Promise<any> {
     logger.info('Deleting item with todoId ', todoId)
 
-    var params = {
+    const params = {
       TableName : this.todosTable,
       Key: {
         todoId
@@ -47,10 +48,20 @@ export class TodosAccess {
       ReturnValues: "ALL_OLD"
     }
 
-    const result = await this.docClient.delete(params).promise()
+    const result = await this.docClient.delete(params, (err, data) => {
+      if (err) logger.info('Error trying to delete item: ', err)
+      else {
+        logger.info('Deleting item: ', data)
+      }
+    }).promise()
 
-    return result
+    return result.Attributes
+  }
 
+  async updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<TodoItem> {
+    logger.info('Updating item with todoId ', todoId)
+
+    return undefined
   }
 
 }
