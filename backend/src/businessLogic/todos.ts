@@ -3,6 +3,7 @@ import * as uuid from 'uuid'
 import { TodoItem } from '../models/TodoItem'
 import { TodosAccess } from '../dataLayer/todosAccess'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import { parseUserId } from '../auth/utils'
 
 const todosAccess = new TodosAccess()
 
@@ -16,7 +17,7 @@ export async function createTodo(
 ): Promise<TodoItem> {
 
   const todoId = uuid.v4()
-  const userId = jwtToken
+  const userId = parseUserId(jwtToken)
 
   return await todosAccess.createTodo({
     userId: userId,
