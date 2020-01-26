@@ -28,5 +28,8 @@ export async function createTodo(
     done: false,
     attachmentUrl: undefined
   })
+}
 
+export async function deleteTodo(todoId: string): Promise<TodoItem> {
+  return await todosAccess.deleteTodo(todoId)
 }
