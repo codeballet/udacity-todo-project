@@ -5,6 +5,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { TodoItem } from '../models/TodoItem'
 import {UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { createLogger } from '../utils/logger'
+// import { puts } from 'util'
 
 const logger = createLogger('todosAccess')
 const XAWS = AWSXRay.captureAWS(AWS)
@@ -55,13 +56,40 @@ export class TodosAccess {
       }
     }).promise()
 
-    return result.Attributes
+    logger.info('deleteTodo dataLayer returning result: ', result)
+    return result
   }
 
-  async updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<TodoItem> {
+  async updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<any> {
     logger.info('Updating item with todoId ', todoId)
 
-    return undefined
+    const params = {
+      TableName: this.todosTable,
+      Key: { todoId },
+      AttributeUpdates: {
+        'name': {
+          Action: "PUT",
+          Value: updatedTodo.name
+        },
+        'dueDate': {
+          Action: "PUT",
+          Value: updatedTodo.dueDate
+        },
+        'done': {
+          Action: "PUT",
+          Value: updatedTodo.done
+        }
+      },
+      ReturnValues: "ALL_NEW"
+    }
+
+    const result = await this.docClient.update(params, (err, data) => {
+      if (err) console.log(err);
+      else console.log(data);
+    }).promise()
+
+    logger.info('updateTodo dataLayer returning result: ', result)
+    return result
   }
 
 }
