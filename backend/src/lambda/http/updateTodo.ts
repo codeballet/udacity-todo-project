@@ -8,7 +8,7 @@ import { createLogger } from '../../utils/logger'
 const logger = createLogger('updateTodo')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  logger.info('Handler updating event', event)
+  logger.info(`updateTodo handler updating event: ${event}`)
   
   const todoId = event.pathParameters.todoId
   const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)

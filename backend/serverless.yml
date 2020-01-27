@@ -8,12 +8,12 @@ plugins:
   - serverless-iam-roles-per-function
 
 provider:
-  tracing:
-    lambda: true
-    apiGateway: true
+  # tracing:
+  #   lambda: true
+  #   apiGateway: true
 
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
 
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
