@@ -92,4 +92,27 @@ export class TodosAccess {
     return result
   }
 
+  async updateURL(todoId: string, uploadUrl: string): Promise<any> {
+    logger.info('Updating attachmentUrl for todo item: ', todoId)
+
+    const params = {
+      TableName: this.todosTable,
+      Key: { todoId },
+      AttributeUpdates: {
+        'attachmentUrl': {
+          Action: "ADD",
+          Value: uploadUrl
+        }
+      },
+      ReturnValues: "UPDATED_NEW"
+    }
+
+    const result = await this.docClient.update(params, (err, data) => {
+      if (err) console.log(err)
+      else console.log(data)
+    }).promise()
+
+    return result
+  }
+
 }
