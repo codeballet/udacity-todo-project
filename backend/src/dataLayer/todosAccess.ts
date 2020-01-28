@@ -39,7 +39,7 @@ export class TodosAccess {
   }
 
   async deleteTodo(todoId): Promise<any> {
-    logger.info('Deleting item with todoId ', todoId)
+    logger.info(`Deleting item with todoId ${todoId}`)
 
     const params = {
       TableName : this.todosTable,
@@ -50,13 +50,13 @@ export class TodosAccess {
     }
 
     const result = await this.docClient.delete(params, (err, data) => {
-      if (err) logger.info('Error trying to delete item: ', err)
+      if (err) logger.info(`Trying to delete item error: ${err}`)
       else {
-        logger.info('Deleting item: ', data)
+        logger.info(`Deleting item data: ${data}`)
       }
     }).promise()
 
-    logger.info('deleteTodo dataLayer returning result: ', result)
+    logger.info(`deleteTodo dataLayer returning result: ${result}`)
     return result
   }
 
@@ -66,19 +66,11 @@ export class TodosAccess {
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      AttributeUpdates: {
-        'name': {
-          Action: "PUT",
-          Value: updatedTodo.name
-        },
-        'dueDate': {
-          Action: "PUT",
-          Value: updatedTodo.dueDate
-        },
-        'done': {
-          Action: "PUT",
-          Value: updatedTodo.done
-        }
+      UpdateExpression: 'set name = :n, dueDate = :dD, done = :d',
+      ExpressionAttributeValues: {
+        ':n':updatedTodo.name,
+        ':dD':updatedTodo.dueDate,
+        ':d':updatedTodo.done
       },
       ReturnValues: "ALL_NEW"
     }
@@ -88,12 +80,12 @@ export class TodosAccess {
       else console.log(data);
     }).promise()
 
-    logger.info('updateTodo dataLayer returning result: ', result)
+    logger.info(`updateTodo dataLayer returning result: ${result}`)
     return result
   }
 
   async updateURL(todoId: string, uploadUrl: string): Promise<any> {
-    logger.info('Updating attachmentUrl for todo item: ', todoId)
+    logger.info(`Updating attachmentUrl for todo item: ${todoId}`)
 
     const params = {
       TableName: this.todosTable,
