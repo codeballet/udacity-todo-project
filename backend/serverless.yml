@@ -13,9 +13,9 @@ custom:
     includeModules: true
 
 provider:
-  # tracing:
-  #   lambda: true
-  #   apiGateway: true
+  tracing:
+    lambda: true
+    apiGateway: true
 
   name: aws
   runtime: nodejs12.x
@@ -47,6 +47,21 @@ functions:
         Action:
           - dynamodb:Scan
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments,
+          - xray:PutTelemetryRecords,
+          - xray:GetSamplingRules,
+          - xray:GetSamplingTargets,
+          - xray:GetSamplingStatisticSummaries,
+          - xray:BatchGetTraces,
+          - xray:GetServiceGraph,
+          - xray:GetTraceGraph,
+          - xray:GetTraceSummaries,
+          - xray:GetGroups,
+          - xray:GetGroup
+        Resource:
+          - '*'
 
   # TODO: Configure this function
   CreateTodo:
@@ -62,6 +77,21 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments,
+          - xray:PutTelemetryRecords,
+          - xray:GetSamplingRules,
+          - xray:GetSamplingTargets,
+          - xray:GetSamplingStatisticSummaries,
+          - xray:BatchGetTraces,
+          - xray:GetServiceGraph,
+          - xray:GetTraceGraph,
+          - xray:GetTraceSummaries,
+          - xray:GetGroups,
+          - xray:GetGroup
+        Resource:
+          - '*'
 
   # TODO: Configure this function
   UpdateTodo:
@@ -77,6 +107,21 @@ functions:
         Action:
           dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments,
+          - xray:PutTelemetryRecords,
+          - xray:GetSamplingRules,
+          - xray:GetSamplingTargets,
+          - xray:GetSamplingStatisticSummaries,
+          - xray:BatchGetTraces,
+          - xray:GetServiceGraph,
+          - xray:GetTraceGraph,
+          - xray:GetTraceSummaries,
+          - xray:GetGroups,
+          - xray:GetGroup
+        Resource:
+          - '*'
 
   # TODO: Configure this function
   DeleteTodo:
@@ -92,6 +137,21 @@ functions:
         Action:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments,
+          - xray:PutTelemetryRecords,
+          - xray:GetSamplingRules,
+          - xray:GetSamplingTargets,
+          - xray:GetSamplingStatisticSummaries,
+          - xray:BatchGetTraces,
+          - xray:GetServiceGraph,
+          - xray:GetTraceGraph,
+          - xray:GetTraceSummaries,
+          - xray:GetGroups,
+          - xray:GetGroup
+        Resource:
+          - '*'
 
   # TODO: Configure this function
   GenerateUploadUrl:
@@ -100,7 +160,22 @@ functions:
       - http:
           method: post
           path: todos/{todoId}/attachment
-
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments,
+          - xray:PutTelemetryRecords,
+          - xray:GetSamplingRules,
+          - xray:GetSamplingTargets,
+          - xray:GetSamplingStatisticSummaries,
+          - xray:BatchGetTraces,
+          - xray:GetServiceGraph,
+          - xray:GetTraceGraph,
+          - xray:GetTraceSummaries,
+          - xray:GetGroups,
+          - xray:GetGroup
+        Resource:
+          - '*'
 resources:
   Resources:
     # TODO: Add any necessary AWS resources
