@@ -28,7 +28,7 @@ export async function createTodo(
     userId: userId,
     todoId: todoId,
     createdAt: new Date().toISOString(),
-    name: createTodoRequest.name,
+    task: createTodoRequest.task,
     dueDate: createTodoRequest.dueDate,
     done: false,
     attachmentUrl: undefined

@@ -66,9 +66,9 @@ export class TodosAccess {
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      UpdateExpression: 'set name = :n, dueDate = :dD, done = :d',
+      UpdateExpression: 'set task = :n, dueDate = :dD, done = :d',
       ExpressionAttributeValues: {
-        ':n':updatedTodo.name,
+        ':n':updatedTodo.task,
         ':dD':updatedTodo.dueDate,
         ':d':updatedTodo.done
       },
