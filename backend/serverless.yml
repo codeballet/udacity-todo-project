@@ -7,6 +7,11 @@ plugins:
   - serverless-reqvalidator-plugin
   - serverless-iam-roles-per-function
 
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
 provider:
   # tracing:
   #   lambda: true
@@ -66,7 +71,7 @@ functions:
           method: patch
           path: todos/{todoId}
           cors: true
-          # authorizer: Auth
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
