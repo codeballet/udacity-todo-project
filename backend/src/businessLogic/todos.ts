@@ -9,6 +9,7 @@ import { parseUserId } from '../auth/utils'
 
 const s3 = new AWS.S3({ signatureVersion: 'v4' })
 const todosAccess = new TodosAccess()
+
 const bucketName = process.env.IMAGES_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
@@ -45,8 +46,11 @@ export async function updateTodo(todoId: string, updatedTodo: UpdateTodoRequest)
 
 export async function imageUrl(todoId: string): Promise<string> {
   const uploadUrl = getUploadUrl(todoId)
+  const imageUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`
 
-  return await todosAccess.updateURL(todoId, uploadUrl)
+  await todosAccess.updateURL(todoId, imageUrl)
+
+  return uploadUrl
 }
 
 function getUploadUrl(todoId: string) {

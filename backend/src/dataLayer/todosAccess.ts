@@ -8,6 +8,7 @@ import { createLogger } from '../utils/logger'
 // import { puts } from 'util'
 
 const logger = createLogger('todosAccess')
+
 // const XAWS = AWSXRay.captureAWS(AWS)
 
 export class TodosAccess {
@@ -38,7 +39,7 @@ export class TodosAccess {
     return todo
   }
 
-  async deleteTodo(todoId): Promise<any> {
+  async deleteTodo(todoId: string): Promise<any> {
     logger.info(`Deleting item with todoId ${todoId}`)
 
     const params = {
@@ -49,12 +50,7 @@ export class TodosAccess {
       ReturnValues: "ALL_OLD"
     }
 
-    const result = await this.docClient.delete(params, (err, data) => {
-      if (err) logger.info(`Trying to delete item error: ${err}`)
-      else {
-        logger.info(`Deleting item data: ${data}`)
-      }
-    }).promise()
+    const result = await this.docClient.delete(params).promise()
 
     logger.info(`deleteTodo dataLayer returning result: ${result}`)
     return result
@@ -75,34 +71,27 @@ export class TodosAccess {
       ReturnValues: "ALL_NEW"
     }
 
-    const result = await this.docClient.update(params, (err, data) => {
-      if (err) console.log(err);
-      else console.log(data);
-    }).promise()
+    const result = await this.docClient.update(params).promise()
 
     logger.info(`updateTodo dataLayer returning result: ${result}`)
     return result
   }
 
-  async updateURL(todoId: string, uploadUrl: string): Promise<any> {
+  async updateURL(todoId: string, imageUrl: string): Promise<any> {
     logger.info(`Updating attachmentUrl for todo item: ${todoId}`)
 
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      AttributeUpdates: {
-        'attachmentUrl': {
-          Action: "ADD",
-          Value: uploadUrl
-        }
+      UpdateExpression: 'set attachementUrl = :a',
+      ExpressionAttributeValues: {
+        ':a':imageUrl
       },
       ReturnValues: "UPDATED_NEW"
     }
 
-    const result = await this.docClient.update(params, (err, data) => {
-      if (err) console.log(err)
-      else console.log(data)
-    }).promise()
+    const result = await this.docClient.update(params).promise()
+    logger.info(`Returning result from DynamoDB: ${result}`)
 
     return result
   }
