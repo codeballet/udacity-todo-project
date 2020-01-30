@@ -27,6 +27,7 @@ provider:
     TODOS_TABLE: Todos-${self:provider.stage}
     IMAGES_S3_BUCKET: serverless-todo-images-stj-${self:provider.stage}
     SINGED_URL_EXPIRATION: 300
+    USER_ID_INDEX: UserIdIndex
 
 functions:
   Auth:
@@ -44,8 +45,13 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:Scan
+          - dynamodb:scan
+          - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments,
@@ -183,7 +189,6 @@ functions:
           - '*'
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
     GatewayResponseDefault4XX:
       Type: AWS::ApiGateway::GatewayResponse
       Properties:
@@ -210,9 +215,22 @@ resources:
         AttributeDefinitions:
           - AttributeName: todoId
             AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
         KeySchema:  
           - AttributeName: todoId
             KeyType: HASH
+          - AttributeName: createdAt
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.USER_ID_INDEX}
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
 
