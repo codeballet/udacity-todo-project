@@ -7,7 +7,7 @@ import { createLogger } from '../../utils/logger'
 const logger = createLogger('deleteTodo')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  logger.info('deleteTodo is processing event', event)
+  logger.info(`deleteTodo is processing event ${event}`)
 
   const todoId = event.pathParameters.todoId
 
@@ -17,7 +17,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   return {
     statusCode: 201,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
       item: deletedTodo
