@@ -210,22 +210,22 @@ resources:
         AttributeDefinitions:
           - AttributeName: todoId
             AttributeType: S
-          # - AttributeName: createdAt
-          #   AttributeType: S
-          # - AttributeName: userId
-          #   AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
         KeySchema:  
           - AttributeName: todoId
             KeyType: HASH
-          # - AttributeName: createdAt
-          #   KeyType: RANGE
-        # GlobalSecondaryIndexes:
-        #   - IndexName: ${self:provider.environment.USER_ID_INDEX}
-        #     KeySchema:
-        #       - AttributeName: userId
-        #         KeyType: HASH
-        #     Projection:
-        #       ProjectionType: ALL
+          - AttributeName: createdAt
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.USER_ID_INDEX}
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
 
