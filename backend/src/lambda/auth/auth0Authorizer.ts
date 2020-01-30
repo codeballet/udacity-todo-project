@@ -9,6 +9,7 @@ import { Jwt } from '../../auth/Jwt'
 import { JwtPayload } from '../../auth/JwtPayload'
 
 const logger = createLogger('auth')
+let jwks = null
 
 // TODO: Provide a URL that can be used to download a certificate that can be used
 // to verify JWT token signature.
@@ -57,6 +58,7 @@ export const handler = async (
   }
 }
 
+// Code adapted from: https://gist.github.com/westmark/faee223e05bcbab433bfd4ed8e36fb5f
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
@@ -91,16 +93,14 @@ function getToken(authHeader: string): string {
 }
 
 function certToPEM( cert ) {
-  let pem = cert.match( /.{1,64}/g ).join( '\n' );
-  pem = `-----BEGIN CERTIFICATE-----\n${ cert }\n-----END CERTIFICATE-----\n`;
-  return pem;
+  let pem = cert.match( /.{1,64}/g ).join( '\n' )
+  pem = `-----BEGIN CERTIFICATE-----\n${ cert }\n-----END CERTIFICATE-----\n`
+  return pem
 }
-
-let jwks = null;
 
 function fetchJWKS() {
   if ( jwks ) {
-    return Promise.resolve();
+    return Promise.resolve()
   }
   return new Promise( ( resolve, reject ) => {
     request(
@@ -111,16 +111,16 @@ function fetchJWKS() {
       },
       ( err, res ) => {
         if ( err ) {
-          reject( err );
+          reject( err )
         } else if ( res.statusCode < 200 || res.statusCode >= 300 ) {
-          reject( new Error( res.body && ( res.body.message || res.body ) ) );
+          reject( new Error( res.body && ( res.body.message || res.body ) ) )
         } else {
-          jwks = res.body.keys;
-          resolve();
+          jwks = res.body.keys
+          resolve()
         }
       }
-    );
-  } );
+    )
+  } )
 }
 
 function getJWKSSigningKeys() {
@@ -132,9 +132,9 @@ function getJWKSSigningKeys() {
         key.kid && // The `kid` must be present to be useful for later
         ( ( key.x5c && key.x5c.length ) || ( key.n && key.e ) ) // Has useful public keys
     )
-    .map( ( key ) => ( { kid: key.kid, nbf: key.nbf, publicKey: certToPEM( key.x5c[ 0 ] ) } ) );
+    .map( ( key ) => ( { kid: key.kid, nbf: key.nbf, publicKey: certToPEM( key.x5c[ 0 ] ) } ) )
 }
 
 function getJWKSSigningKey( kid ) {
-  return getJWKSSigningKeys().find( ( key ) => key.kid === kid );
+  return getJWKSSigningKeys().find( ( key ) => key.kid === kid )
 }
