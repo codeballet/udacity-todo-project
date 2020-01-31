@@ -14,25 +14,25 @@ const logger = createLogger('todosAccess')
 export class TodosAccess {
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
-    private readonly todosTable = process.env.TODOS_TABLE) {
-    // private readonly userIdIndex = process.env.USER_ID_INDEX) {
+    private readonly todosTable = process.env.TODOS_TABLE,
+    private readonly userIdIndex = process.env.USER_ID_INDEX) {
   }
 
   async getAllTodos(activeUser): Promise<TodoItem[]> {
     logger.info(`Getting all Todos for user: ${activeUser}`)
 
-    const result = await this.docClient.scan({
-      TableName: this.todosTable
-    }).promise()
-
-    // const result = await this.docClient.query({
-    //   TableName: this.todosTable,
-    //   IndexName: this.userIdIndex,
-    //   KeyConditionExpression: 'userId = :userId',
-    //   ExpressionAttributeValues: {
-    //     ':userId': userId
-    //   }
+    // const result = await this.docClient.scan({
+    //   TableName: this.todosTable
     // }).promise()
+
+    const result = await this.docClient.query({
+      TableName: this.todosTable,
+      IndexName: this.userIdIndex,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': activeUser
+      }
+    }).promise()
 
     const items = result.Items
     return items as TodoItem[]
