@@ -18,8 +18,8 @@ export class TodosAccess {
     // private readonly userIdIndex = process.env.USER_ID_INDEX) {
   }
 
-  async getAllTodos(principalId): Promise<TodoItem[]> {
-    logger.info(`Getting all Todos for user: ${principalId}`)
+  async getAllTodos(activeUser): Promise<TodoItem[]> {
+    logger.info(`Getting all Todos for user: ${activeUser}`)
 
     const result = await this.docClient.scan({
       TableName: this.todosTable
