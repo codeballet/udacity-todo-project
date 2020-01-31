@@ -1,4 +1,3 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
 import { decode } from 'jsonwebtoken'
 import { JwtPayload } from './JwtPayload'
 
@@ -28,20 +27,4 @@ export function getToken(authHeader: string): string {
   const token = split[1]
 
   return token
-}
-
-
-/**
- * Parse an API Gateway event header and return an authorization header
- * @param event to extract
- * @returns an authorization header
- */
-export function getAuthHeader(event: APIGatewayProxyEvent): string {
-  if (!event) throw new Error('No event received')
-  
-  const result = JSON.stringify(event.headers)
-  const jsonResult = JSON.parse(result)
-  const authHeader: string = jsonResult.Authorization
-
-  return authHeader
 }

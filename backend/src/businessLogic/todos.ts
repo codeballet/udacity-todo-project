@@ -13,7 +13,8 @@ const todosAccess = new TodosAccess()
 const bucketName = process.env.IMAGES_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
-export async function getAllTodos(activeUser): Promise<TodoItem[]> {
+export async function getAllTodos(jwtToken: string): Promise<TodoItem[]> {
+  const activeUser = parseUserId(jwtToken)
   return todosAccess.getAllTodos(activeUser)
 }
 

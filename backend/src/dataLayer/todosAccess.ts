@@ -5,7 +5,6 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { TodoItem } from '../models/TodoItem'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { createLogger } from '../utils/logger'
-import { parseUserId, getToken } from '../auth/utils'
 // import { puts } from 'util'
 
 const logger = createLogger('todosAccess')
@@ -19,9 +18,7 @@ export class TodosAccess {
     private readonly userIdIndex = process.env.USER_ID_INDEX) {
   }
 
-  async getAllTodos(authHeader: string): Promise<TodoItem[]> {
-    const jwtToken = getToken(authHeader)
-    const activeUser = parseUserId(jwtToken)
+  async getAllTodos(activeUser: string): Promise<TodoItem[]> {
     logger.info(`Getting all Todos for user: ${activeUser}`)
 
     const result = await this.docClient.query({
