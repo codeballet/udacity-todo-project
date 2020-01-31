@@ -7,6 +7,7 @@ import { createLogger } from '../../utils/logger'
 import * as request from 'request'
 import { Jwt } from '../../auth/Jwt'
 import { JwtPayload } from '../../auth/JwtPayload'
+import { getToken } from '../../auth/utils'
 
 const logger = createLogger('auth')
 let jwks = null
@@ -78,18 +79,6 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
 
   return verify(token, actualKey, {algorithms: ['RS256'] }) as JwtPayload
   // return verify(token, cert, {algorithms: ['RS256'] }) as JwtPayload
-}
-
-function getToken(authHeader: string): string {
-  if (!authHeader) throw new Error('No authentication header')
-
-  if (!authHeader.toLowerCase().startsWith('bearer '))
-    throw new Error('Invalid authentication header')
-
-  const split = authHeader.split(' ')
-  const token = split[1]
-
-  return token
 }
 
 function certToPEM( cert ) {
