@@ -37,8 +37,9 @@ export async function createTodo(
   })
 }
 
-export async function deleteTodo(todoId: string): Promise<any> {
-  return await todosAccess.deleteTodo(todoId)
+export async function deleteTodo(todoId: string, jwtToken: string): Promise<any> {
+  const activeUser = parseUserId(jwtToken)
+  return await todosAccess.deleteTodo(todoId, activeUser)
 }
 
 export async function updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<any> {

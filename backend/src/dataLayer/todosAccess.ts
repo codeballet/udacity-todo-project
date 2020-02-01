@@ -45,13 +45,17 @@ export class TodosAccess {
     return todo
   }
 
-  async deleteTodo(todoId: string): Promise<any> {
+  async deleteTodo(todoId: string, activeUser: string): Promise<any> {
     logger.info(`Deleting item with todoId ${todoId}`)
 
     const params = {
       TableName : this.todosTable,
       Key: {
         todoId
+      },
+      ConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': activeUser
       },
       ReturnValues: "ALL_OLD"
     }
