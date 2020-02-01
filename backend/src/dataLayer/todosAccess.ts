@@ -47,12 +47,11 @@ export class TodosAccess {
 
   async deleteTodo(todoId: string, activeUser: string): Promise<any> {
     logger.info(`Deleting item with todoId ${todoId}`)
+    logger.info(`Deleting item with userId ${activeUser}`)
 
     const params = {
       TableName : this.todosTable,
-      Key: {
-        todoId
-      },
+      Key: { todoId },
       ConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: {
         ':userId': activeUser
@@ -62,21 +61,24 @@ export class TodosAccess {
 
     const result = await this.docClient.delete(params).promise()
 
-    logger.info(`deleteTodo dataLayer returning result: ${result}`)
     return result
   }
 
-  async updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<any> {
+  async updateTodo(todoId: string, 
+                   updatedTodo: UpdateTodoRequest, 
+                   activeUser: string): Promise<any> {
     logger.info(`dataLayer updateTodo updating item with todoId ${todoId}`)
 
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      UpdateExpression: 'set task = :n, dueDate = :dD, done = :d',
+      UpdateExpression: 'set task = :t, dueDate = :dD, done = :d',
+      ConditionExpression: 'userId = :uId',
       ExpressionAttributeValues: {
-        ':n':updatedTodo.task,
+        ':t':updatedTodo.task,
         ':dD':updatedTodo.dueDate,
-        ':d':updatedTodo.done
+        ':d':updatedTodo.done,
+        ':uId':activeUser
       },
       ReturnValues: "ALL_NEW"
     }
@@ -87,15 +89,19 @@ export class TodosAccess {
     return result
   }
 
-  async updateURL(todoId: string, imageUrl: string): Promise<any> {
+  async updateURL(todoId: string, 
+                  imageUrl: string,
+                  activeUser: string): Promise<any> {
     logger.info(`Updating attachmentUrl for todo item: ${todoId}`)
 
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
       UpdateExpression: 'set attachementUrl = :a',
+      ConditionExpression: 'userId = :uId',
       ExpressionAttributeValues: {
-        ':a':imageUrl
+        ':a':imageUrl,
+        ':uId':activeUser
       },
       ReturnValues: "UPDATED_NEW"
     }

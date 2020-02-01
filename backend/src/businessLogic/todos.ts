@@ -42,15 +42,19 @@ export async function deleteTodo(todoId: string, jwtToken: string): Promise<any>
   return await todosAccess.deleteTodo(todoId, activeUser)
 }
 
-export async function updateTodo(todoId: string, updatedTodo: UpdateTodoRequest): Promise<any> {
-  return await todosAccess.updateTodo(todoId, updatedTodo)
+export async function updateTodo(todoId: string, 
+                                 updatedTodo: UpdateTodoRequest,
+                                 jwtToken: string): Promise<any> {
+  const activeUser = parseUserId(jwtToken)
+  return await todosAccess.updateTodo(todoId, updatedTodo, activeUser)
 }
 
-export async function imageUrl(todoId: string): Promise<string> {
+export async function imageUrl(todoId: string, jwtToken: string): Promise<string> {
   const uploadUrl = getUploadUrl(todoId)
   const imageUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`
+  const activeUser = parseUserId(jwtToken)
 
-  await todosAccess.updateURL(todoId, imageUrl)
+  await todosAccess.updateURL(todoId, imageUrl, activeUser)
 
   return uploadUrl
 }
