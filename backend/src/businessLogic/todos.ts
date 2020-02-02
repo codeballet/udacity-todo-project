@@ -34,7 +34,8 @@ export async function createTodo(
 }
 
 
-export async function deleteTodo(todoId: string, jwtToken: string): Promise<any> {
+export async function deleteTodo(todoId: string, jwtToken: string
+): Promise<any> {
   const activeUser = parseUserId(jwtToken)
   return await todosAccess.deleteTodo(todoId, activeUser)
 }
@@ -42,18 +43,19 @@ export async function deleteTodo(todoId: string, jwtToken: string): Promise<any>
 
 export async function updateTodo(todoId: string, 
                                  updatedTodo: UpdateTodoRequest,
-                                 jwtToken: string): Promise<any> {
+                                 jwtToken: string
+): Promise<any> {
   const activeUser = parseUserId(jwtToken)
   return await todosAccess.updateTodo(todoId, updatedTodo, activeUser)
 }
 
 
-export async function imageUpload(todoId: string, 
-                                  jwtToken: string,
-                                  newImage: any): Promise<string> {
+export async function generateUpload(todoId: string, 
+                                  jwtToken: string
+): Promise<string> {
   const activeUser = parseUserId(jwtToken)
 
-  const upload = await todosAccess.updateURL(todoId, activeUser, newImage)
+  const upload = await todosAccess.updateURL(todoId, activeUser)
 
   return upload
 }

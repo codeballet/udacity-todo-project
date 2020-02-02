@@ -91,23 +91,20 @@ export class TodosAccess {
   }
 
   async updateURL(todoId: string, 
-                  activeUser: string,
-                  newImage: any): Promise<any> {
+                  activeUser: string
+  ): Promise<any> {
     logger.info(`Updating attachmentUrl for todo item: ${todoId}`)
 
     const imageUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`
-    const imageData = {
-      ...newImage
-    }
+    
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      UpdateExpression: 'set attachementUrl = :a, imageData = :iD',
+      UpdateExpression: 'set attachementUrl = :a',
       ConditionExpression: 'userId = :uId',
       ExpressionAttributeValues: {
         ':a':imageUrl,
-        ':uId':activeUser,
-        ':iD':imageData
+        ':uId':activeUser
       },
       ReturnValues: "UPDATED_NEW"
     }
