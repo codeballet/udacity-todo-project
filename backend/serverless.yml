@@ -49,6 +49,7 @@ functions:
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler
+    tracing: PassThrough
     events:
       - http:
           method: get
@@ -65,24 +66,10 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-      - Effect: Allow
-        Action:
-          - xray:PutTraceSegments,
-          - xray:PutTelemetryRecords,
-          - xray:GetSamplingRules,
-          - xray:GetSamplingTargets,
-          - xray:GetSamplingStatisticSummaries,
-          - xray:BatchGetTraces,
-          - xray:GetServiceGraph,
-          - xray:GetTraceGraph,
-          - xray:GetTraceSummaries,
-          - xray:GetGroups,
-          - xray:GetGroup
-        Resource:
-          - '*'
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
+    tracing: PassThrough
     events:
       - http:
           method: post
@@ -104,24 +91,10 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-      - Effect: Allow
-        Action:
-          - xray:PutTraceSegments,
-          - xray:PutTelemetryRecords,
-          - xray:GetSamplingRules,
-          - xray:GetSamplingTargets,
-          - xray:GetSamplingStatisticSummaries,
-          - xray:BatchGetTraces,
-          - xray:GetServiceGraph,
-          - xray:GetTraceGraph,
-          - xray:GetTraceSummaries,
-          - xray:GetGroups,
-          - xray:GetGroup
-        Resource:
-          - '*'
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
+    tracing: PassThrough
     events:
       - http:
           method: patch
@@ -143,24 +116,10 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-      - Effect: Allow
-        Action:
-          - xray:PutTraceSegments,
-          - xray:PutTelemetryRecords,
-          - xray:GetSamplingRules,
-          - xray:GetSamplingTargets,
-          - xray:GetSamplingStatisticSummaries,
-          - xray:BatchGetTraces,
-          - xray:GetServiceGraph,
-          - xray:GetTraceGraph,
-          - xray:GetTraceSummaries,
-          - xray:GetGroups,
-          - xray:GetGroup
-        Resource:
-          - '*'
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
+    tracing: PassThrough
     events:
       - http:
           method: delete
@@ -176,24 +135,10 @@ functions:
         Action:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-      - Effect: Allow
-        Action:
-          - xray:PutTraceSegments,
-          - xray:PutTelemetryRecords,
-          - xray:GetSamplingRules,
-          - xray:GetSamplingTargets,
-          - xray:GetSamplingStatisticSummaries,
-          - xray:BatchGetTraces,
-          - xray:GetServiceGraph,
-          - xray:GetTraceGraph,
-          - xray:GetTraceSummaries,
-          - xray:GetGroups,
-          - xray:GetGroup
-        Resource:
-          - '*'
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
+    tracing: PassThrough
     events:
       - http:
           method: post
@@ -214,21 +159,7 @@ functions:
           - s3:GetObject
           - s3:PutObject
         Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
-      - Effect: Allow
-        Action:
-          - xray:PutTraceSegments,
-          - xray:PutTelemetryRecords,
-          - xray:GetSamplingRules,
-          - xray:GetSamplingTargets,
-          - xray:GetSamplingStatisticSummaries,
-          - xray:BatchGetTraces,
-          - xray:GetServiceGraph,
-          - xray:GetTraceGraph,
-          - xray:GetTraceSummaries,
-          - xray:GetGroups,
-          - xray:GetGroup
-        Resource:
-          - '*'
+
 resources:
   Resources:
     GatewayResponseDefault4XX:
