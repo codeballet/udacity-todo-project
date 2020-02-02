@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "group",
+  "type": "object",
+  "properties": {
+    "task": {
+      "type": "string"
+    },
+    "dueDate": {
+      "type": "string"
+    },
+    "done": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+      "task",
+      "dueDate",
+      "done"
+  ],
+  "additionalProperties": false
+}
