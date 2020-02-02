@@ -9,6 +9,7 @@ import { createLogger } from '../utils/logger'
 
 const logger = createLogger('todosAccess')
 
+const bucketName = process.env.IMAGES_S3_BUCKET
 // const XAWS = AWSXRay.captureAWS(AWS)
 
 export class TodosAccess {
@@ -90,24 +91,28 @@ export class TodosAccess {
   }
 
   async updateURL(todoId: string, 
-                  imageUrl: string,
-                  activeUser: string): Promise<any> {
+                  activeUser: string,
+                  newImage: any): Promise<any> {
     logger.info(`Updating attachmentUrl for todo item: ${todoId}`)
 
+    const imageUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`
+    const imageData = {
+      ...newImage
+    }
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      UpdateExpression: 'set attachementUrl = :a',
+      UpdateExpression: 'set attachementUrl = :a, imageData = :iD',
       ConditionExpression: 'userId = :uId',
       ExpressionAttributeValues: {
         ':a':imageUrl,
-        ':uId':activeUser
+        ':uId':activeUser,
+        ':iD':imageData
       },
       ReturnValues: "UPDATED_NEW"
     }
 
     const result = await this.docClient.update(params).promise()
-    logger.info(`Returning result from DynamoDB: ${result}`)
 
     return result
   }

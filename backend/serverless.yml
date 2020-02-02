@@ -26,7 +26,7 @@ provider:
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     IMAGES_S3_BUCKET: serverless-todo-images-stj-${self:provider.stage}
-    SINGED_URL_EXPIRATION: 300
+    SIGNED_URL_EXPIRATION: 300
     USER_ID_INDEX: UserIdIndex
 
 functions:
