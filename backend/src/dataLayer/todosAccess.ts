@@ -99,7 +99,7 @@ export class TodosAccess {
     const params = {
       TableName: this.todosTable,
       Key: { todoId },
-      UpdateExpression: 'set attachementUrl = :a',
+      UpdateExpression: 'set attachmentUrl = :a',
       ConditionExpression: 'userId = :uId',
       ExpressionAttributeValues: {
         ':a':imageUrl,
