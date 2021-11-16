@@ -14,7 +14,7 @@
     "@types/aws-lambda": "^8.10.40",
     "@types/jsonwebtoken": "^8.3.7",
     "@types/node": "^13.7.0",
-    "aws-sdk": "^2.610.0",
+    "aws-sdk": "^2.814.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-iam-roles-per-function": "^2.0.2",
     "serverless-reqvalidator-plugin": "^1.0.3",
