@@ -19,9 +19,9 @@
     "serverless-iam-roles-per-function": "^2.0.2",
     "serverless-reqvalidator-plugin": "^1.0.3",
     "serverless-webpack": "^5.3.1",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.4.2",
     "typescript": "^3.7.5",
-    "webpack": "^4.41.5"
+    "webpack": "^5.75.0"
   },
   "author": "Johan Stjernholm",
   "license": "MIT"
